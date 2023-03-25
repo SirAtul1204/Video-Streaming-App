@@ -13,6 +13,8 @@ const Signup = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  const [isSignUpButtonDisabled, setSignUpButtonDisabled] = useState(true);
+
   const fields = [
     {
       label: "Name",
@@ -46,6 +48,17 @@ const Signup = () => {
     },
   ];
 
+  useEffect(() => {
+    if (
+      name &&
+      email &&
+      password &&
+      confirmPassword &&
+      password === confirmPassword
+    )
+      setSignUpButtonDisabled(false);
+  }, [name, email, password, confirmPassword]);
+
   return (
     <CenterBox>
       <CustomPaper>
@@ -61,7 +74,9 @@ const Signup = () => {
             </Grid>
           ))}
           <Grid item>
-            <Button variant="contained">Sign Up</Button>
+            <Button variant="contained" disabled={isSignUpButtonDisabled}>
+              Sign Up
+            </Button>
           </Grid>
         </Grid>
       </CustomPaper>

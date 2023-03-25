@@ -8,7 +8,9 @@ export interface FormTextFieldProps {
 }
 
 const FormTextField: FC<FormTextFieldProps> = (props) => {
-  return <TextField size="small" variant="outlined" fullWidth {...props} />;
+  return (
+    <TextField size="small" variant="outlined" fullWidth {...props} required />
+  );
 };
 
 export default FormTextField;
