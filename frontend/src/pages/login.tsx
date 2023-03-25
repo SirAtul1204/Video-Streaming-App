@@ -6,10 +6,17 @@ import { ChangeEvent, useEffect, useState } from "react";
 import CenterBox from "../components/CenterBox";
 import CustomPaper from "../components/CustomPaper";
 import FormTextField from "../components/FormTextField";
+import { Errors } from "../utils/contants";
+import helperTextResolver from "../utils/helperTextResolver";
+import validateEmail from "../utils/validators/validateEmail";
+import validatePassword from "../utils/validators/validatePassword";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const [isEmailError, setEmailError] = useState<boolean | null>(null);
+  const [isPasswordError, setPasswordError] = useState<boolean | null>(null);
 
   const [isLoginButtonDisabled, setLoginButtonDisabled] = useState(true);
 
@@ -20,6 +27,9 @@ export default function Login() {
       type: "email",
       value: email,
       onChange: (e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value),
+      error: isEmailError,
+      helperText: helperTextResolver(isEmailError, Errors.EMAIL_ERROR),
+      onBlur: (e: FocusEvent) => setEmailError(!validateEmail(email)),
     },
     {
       label: "Password",
@@ -28,12 +38,16 @@ export default function Login() {
       value: password,
       onChange: (e: ChangeEvent<HTMLInputElement>) =>
         setPassword(e.target.value),
+      error: isPasswordError,
+      helperText: helperTextResolver(isPasswordError, Errors.PASSWORD_ERROR),
+      onBlur: (e: FocusEvent) => setPasswordError(!validatePassword(password)),
     },
   ];
 
   useEffect(() => {
-    if (email && password) setLoginButtonDisabled(false);
-  }, [email, password]);
+    if (isEmailError === false && isPasswordError === false)
+      setLoginButtonDisabled(false);
+  }, [isEmailError, isPasswordError]);
 
   return (
     <CenterBox>

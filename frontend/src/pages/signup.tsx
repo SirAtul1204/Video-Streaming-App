@@ -6,12 +6,24 @@ import { ChangeEvent, useEffect, useState } from "react";
 import CenterBox from "../components/CenterBox";
 import CustomPaper from "../components/CustomPaper";
 import FormTextField from "../components/FormTextField";
+import { Errors } from "../utils/contants";
+import helperTextResolver from "../utils/helperTextResolver";
+import validateEmail from "../utils/validators/validateEmail";
+import validateName from "../utils/validators/validateName";
+import validatePassword from "../utils/validators/validatePassword";
 
 const Signup = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+
+  const [isNameError, setNameError] = useState<boolean | null>(null);
+  const [isEmailError, setEmailError] = useState<boolean | null>(null);
+  const [isPasswordError, setPasswordError] = useState<boolean | null>(null);
+  const [isConfirmPasswordError, setConfirmPasswordError] = useState<
+    boolean | null
+  >(null);
 
   const [isSignUpButtonDisabled, setSignUpButtonDisabled] = useState(true);
 
@@ -22,6 +34,9 @@ const Signup = () => {
       type: "text",
       value: name,
       onChange: (e: ChangeEvent<HTMLInputElement>) => setName(e.target.value),
+      error: isNameError,
+      helperText: helperTextResolver(isNameError, Errors.NAME_ERROR),
+      onBlur: (e: FocusEvent) => setNameError(!validateName(name)),
     },
     {
       label: "Email",
@@ -29,6 +44,9 @@ const Signup = () => {
       type: "email",
       value: email,
       onChange: (e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value),
+      error: isEmailError,
+      helperText: helperTextResolver(isEmailError, Errors.EMAIL_ERROR),
+      onBlur: (e: FocusEvent) => setEmailError(!validateEmail(email)),
     },
     {
       label: "Password",
@@ -37,6 +55,9 @@ const Signup = () => {
       value: password,
       onChange: (e: ChangeEvent<HTMLInputElement>) =>
         setPassword(e.target.value),
+      error: isPasswordError,
+      helperText: helperTextResolver(isPasswordError, Errors.PASSWORD_ERROR),
+      onBlur: (e: FocusEvent) => setPasswordError(!validatePassword(password)),
     },
     {
       label: "Confirm Password",
@@ -45,19 +66,25 @@ const Signup = () => {
       value: confirmPassword,
       onChange: (e: ChangeEvent<HTMLInputElement>) =>
         setConfirmPassword(e.target.value),
+      error: isConfirmPasswordError,
+      helperText: helperTextResolver(
+        isConfirmPasswordError,
+        Errors.CONFIRM_PASSWORD_ERROR
+      ),
+      onBlur: (e: FocusEvent) =>
+        setConfirmPasswordError(!(password === confirmPassword)),
     },
   ];
 
   useEffect(() => {
     if (
-      name &&
-      email &&
-      password &&
-      confirmPassword &&
-      password === confirmPassword
+      isNameError === false &&
+      isEmailError === false &&
+      isPasswordError === false &&
+      isConfirmPasswordError === false
     )
       setSignUpButtonDisabled(false);
-  }, [name, email, password, confirmPassword]);
+  }, [isNameError, isEmailError, isPasswordError, isConfirmPasswordError]);
 
   return (
     <CenterBox>
