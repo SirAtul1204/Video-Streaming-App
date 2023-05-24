@@ -14,19 +14,21 @@ public class ErrorHandler {
 
     @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler(AlreadyExistException.class)
-    public HashMap<String, String> handleError(AlreadyExistException e){
-        HashMap<String, String> m = new HashMap<>();
+    public HashMap<String, Object> handleError(AlreadyExistException e) {
+        HashMap<String, Object> m = new HashMap<>();
         m.put("message", e.getMessage());
+        m.put("success", false);
         return m;
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public HashMap<String, String> handleError(MethodArgumentNotValidException e){
-        HashMap<String, String> m = new HashMap<>();
-        e.getBindingResult().getFieldErrors().forEach(error->{
+    public HashMap<String, Object> handleError(MethodArgumentNotValidException e) {
+        HashMap<String, Object> m = new HashMap<>();
+        e.getBindingResult().getFieldErrors().forEach(error -> {
             m.put(error.getField(), error.getDefaultMessage());
         });
+        m.put("success", false);
         return m;
     }
 }

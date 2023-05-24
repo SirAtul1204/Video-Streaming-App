@@ -22,15 +22,15 @@ public class UserController {
 
     @PostMapping("/signup")
     @ResponseStatus(HttpStatus.CREATED)
-    public HashMap<String, String> createUser(@RequestBody @Valid CreateUserDto body) {
+    public HashMap<String, Object> createUser(@RequestBody @Valid CreateUserDto body) {
         String res = userService.createUser(body);
-        HashMap<String, String> m = new HashMap<>();
+        HashMap<String, Object> m = new HashMap<>();
         m.put("message", res);
         return m;
     }
 
     @PostMapping("/login")
-    public ResponseEntity<HashMap<String, String>> loginUser(@RequestBody @Valid LoginUserDto body){
+    public ResponseEntity<HashMap<String, Object>> loginUser(@RequestBody @Valid LoginUserDto body) {
         String token = userService.login(body);
         ResponseCookie springCookie = ResponseCookie.from("token", token)
                 .httpOnly(true)
@@ -38,8 +38,9 @@ public class UserController {
                 .path("/")
                 .maxAge(1000 * 24 * 60)
                 .build();
-        HashMap<String, String> m = new HashMap<>();
+        HashMap<String, Object> m = new HashMap<>();
         m.put("token", token);
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, springCookie.toString()).body(m);
     }
+
 }

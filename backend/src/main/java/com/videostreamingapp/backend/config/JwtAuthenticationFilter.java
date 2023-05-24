@@ -25,31 +25,33 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final UserDetailsService userDetailsService;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
         Cookie[] cookies = request.getCookies();
         String token = null;
         String userEmail;
-        for(int i=0; i < cookies.length; i++){
-            if(cookies[i].getName() == Constants.token.toString()){
-                token = cookies[i].getValue();
-                break;
+        if (cookies != null) {
+            for (int i = 0; i < cookies.length; i++) {
+                if (cookies[i].getName() == Constants.token.toString()) {
+                    token = cookies[i].getValue();
+                    break;
+                }
             }
         }
         System.out.println(token);
-        if(token == null){
+        if (token == null) {
             filterChain.doFilter(request, response);
             return;
         }
 
         userEmail = jwtService.extractUsername(token);
-        if(userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null){
+        if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
-            if(jwtService.isTokenValid(token, userDetails)){
+            if (jwtService.isTokenValid(token, userDetails)) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails,
                         null,
-                        userDetails.getAuthorities()
-                );
+                        userDetails.getAuthorities());
 
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
