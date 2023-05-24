@@ -15,10 +15,13 @@ import validatePassword from "../utils/validators/validatePassword";
 import { useDispatch } from "react-redux";
 import { openToast } from "@/redux/toastSlice";
 import { useRouter } from "next/router";
+import { Loader } from "@/components/Loader";
 
 const Signup = () => {
   const dispatch = useDispatch();
   const router = useRouter();
+
+  const [isLoading, setLoading] = useState(false);
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -95,6 +98,7 @@ const Signup = () => {
       return;
     }
 
+    setLoading(true);
     const response = await Service.signup({ name, email, password });
     dispatch(
       openToast({
@@ -104,6 +108,7 @@ const Signup = () => {
     );
 
     if (response.success) router.push("/login");
+    else setLoading(false);
   };
 
   useEffect(() => {
@@ -115,6 +120,10 @@ const Signup = () => {
     )
       setSignUpButtonDisabled(false);
   }, [isNameError, isEmailError, isPasswordError, isConfirmPasswordError]);
+
+  if (isLoading) {
+    return <Loader />;
+  }
 
   return (
     <CenterBox>
