@@ -4,9 +4,9 @@ import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
 import { ChangeEvent, useEffect, useState } from "react";
 import CenterBox from "../components/CenterBox";
-import CustomPaper from "../components/CustomPaper";
+import CustomFormPaper from "../components/CustomFormPaper";
 import FormTextField from "../components/FormTextField";
-import { Errors } from "../utils/contants";
+import { Errors } from "../utils/constants";
 import helperTextResolver from "../utils/helperTextResolver";
 import validateEmail from "../utils/validators/validateEmail";
 import validatePassword from "../utils/validators/validatePassword";
@@ -51,7 +51,7 @@ export default function Login() {
 
   return (
     <CenterBox>
-      <CustomPaper>
+      <CustomFormPaper>
         <Grid container alignItems="center" justifyContent="center" spacing={2}>
           <Grid item xs={12}>
             <Typography variant="body1" align="center">
@@ -69,7 +69,7 @@ export default function Login() {
             </Button>
           </Grid>
         </Grid>
-      </CustomPaper>
+      </CustomFormPaper>
       <Typography>
         Don&apos;t have an account?&nbsp;
         <Link variant="body1" color="secondary" href="/signup">

@@ -2,11 +2,12 @@ import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import CenterBox from "../components/CenterBox";
-import CustomPaper from "../components/CustomPaper";
+import CustomFormPaper from "../components/CustomFormPaper";
 import FormTextField from "../components/FormTextField";
-import { Errors } from "../utils/contants";
+import { Service } from "../service/service";
+import { Errors } from "../utils/constants";
 import helperTextResolver from "../utils/helperTextResolver";
 import validateEmail from "../utils/validators/validateEmail";
 import validateName from "../utils/validators/validateName";
@@ -76,6 +77,17 @@ const Signup = () => {
     },
   ];
 
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    if (password !== confirmPassword) {
+      //TODO: Open Toast
+      return;
+    }
+
+    const response = await Service.signup({ name, email, password });
+    console.log(response);
+  };
+
   useEffect(() => {
     if (
       isNameError === false &&
@@ -88,7 +100,7 @@ const Signup = () => {
 
   return (
     <CenterBox>
-      <CustomPaper>
+      <CustomFormPaper handleSubmit={handleSubmit}>
         <Grid container alignItems="center" justifyContent="center" spacing={2}>
           <Grid item xs={12}>
             <Typography variant="body1" align="center">
@@ -101,12 +113,16 @@ const Signup = () => {
             </Grid>
           ))}
           <Grid item>
-            <Button variant="contained" disabled={isSignUpButtonDisabled}>
+            <Button
+              variant="contained"
+              disabled={isSignUpButtonDisabled}
+              type="submit"
+            >
               Sign Up
             </Button>
           </Grid>
         </Grid>
-      </CustomPaper>
+      </CustomFormPaper>
       <Typography>
         Already have an account?&nbsp;
         <Link color="secondary" href="/login">
