@@ -7,13 +7,19 @@ import CenterBox from "../components/CenterBox";
 import CustomFormPaper from "../components/CustomFormPaper";
 import FormTextField from "../components/FormTextField";
 import { Service } from "../service/service";
-import { Errors } from "../utils/constants";
+import { Errors, ToastMessages } from "../utils/constants";
 import helperTextResolver from "../utils/helperTextResolver";
 import validateEmail from "../utils/validators/validateEmail";
 import validateName from "../utils/validators/validateName";
 import validatePassword from "../utils/validators/validatePassword";
+import { useDispatch } from "react-redux";
+import { openToast } from "@/redux/toastSlice";
+import { useRouter } from "next/router";
 
 const Signup = () => {
+  const dispatch = useDispatch();
+  const router = useRouter();
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -80,12 +86,24 @@ const Signup = () => {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (password !== confirmPassword) {
-      //TODO: Open Toast
+      dispatch(
+        openToast({
+          message: ToastMessages.PASSWORDS_DONT_MATCH,
+          color: "error",
+        })
+      );
       return;
     }
 
     const response = await Service.signup({ name, email, password });
-    console.log(response);
+    dispatch(
+      openToast({
+        message: response.message,
+        color: response.success ? "success" : "error",
+      })
+    );
+
+    if (response.success) router.push("/login");
   };
 
   useEffect(() => {
