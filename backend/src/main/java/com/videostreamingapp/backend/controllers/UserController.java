@@ -26,6 +26,7 @@ public class UserController {
         String res = userService.createUser(body);
         HashMap<String, Object> m = new HashMap<>();
         m.put("message", res);
+        m.put("success", true);
         return m;
     }
 
@@ -40,6 +41,7 @@ public class UserController {
                 .build();
         HashMap<String, Object> m = new HashMap<>();
         m.put("token", token);
+        m.put("success", true);
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, springCookie.toString()).body(m);
     }
 

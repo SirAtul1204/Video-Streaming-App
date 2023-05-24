@@ -1,6 +1,8 @@
 package com.videostreamingapp.backend.advice;
 
 import com.videostreamingapp.backend.exceptions.AlreadyExistException;
+import com.videostreamingapp.backend.exceptions.WrongPasswordFormatException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -28,6 +30,15 @@ public class ErrorHandler {
         e.getBindingResult().getFieldErrors().forEach(error -> {
             m.put(error.getField(), error.getDefaultMessage());
         });
+        m.put("success", false);
+        return m;
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(WrongPasswordFormatException.class)
+    public HashMap<String, Object> handleError(WrongPasswordFormatException e) {
+        HashMap<String, Object> m = new HashMap<>();
+        m.put("message", e.getMessage());
         m.put("success", false);
         return m;
     }
