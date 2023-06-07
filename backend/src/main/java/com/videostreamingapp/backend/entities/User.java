@@ -1,16 +1,15 @@
-package com.videostreamingapp.backend.entities.user;
+package com.videostreamingapp.backend.entities;
 
 
+import com.videostreamingapp.backend.utils.constant.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -32,22 +31,24 @@ public class User implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     private Role role;
-    
     public User(String name, String email, String password){
         this.name = name;
         this.email = email;
         this.password = password;
-        this.role = Role.REGULAR;
+        this.role = Role.USER;
+    }
+
+    public User(String name, String email, String password, Role role){
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.role = role;
     }
 
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
-    }
-
-    public String getPassword() {
-        return password;
+        return role.getAuthorities();
     }
 
     @Override
@@ -74,5 +75,4 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
-
 }

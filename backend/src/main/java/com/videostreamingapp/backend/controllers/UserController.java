@@ -42,7 +42,8 @@ public class UserController {
         HashMap<String, Object> m = new HashMap<>();
         m.put("token", token);
         m.put("success", true);
-        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, springCookie.toString()).body(m);
+        m.put("message", "Login Successful");
+        return ResponseEntity.accepted().header(HttpHeaders.SET_COOKIE, springCookie.toString()).body(m);
     }
 
 }
