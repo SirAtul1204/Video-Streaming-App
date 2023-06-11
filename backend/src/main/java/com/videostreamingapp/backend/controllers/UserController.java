@@ -35,7 +35,7 @@ public class UserController {
         String token = userService.login(body);
         ResponseCookie springCookie = ResponseCookie.from("token", token)
                 .httpOnly(true)
-                .secure(true)
+                .secure(false)
                 .path("/")
                 .maxAge(1000 * 24 * 60)
                 .build();

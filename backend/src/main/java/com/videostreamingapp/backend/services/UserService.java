@@ -49,6 +49,9 @@ public class UserService  {
 
 
     public String login(LoginUserDto loginData) {
+        User user = userDao.findByEmail(loginData.email.toLowerCase())
+                .orElseThrow(() -> new DoesNotExistException("User doesn't exist"));
+
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginData.email.toLowerCase(),
@@ -56,8 +59,7 @@ public class UserService  {
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(loginData.email);
 
-        User user = userDao.findByEmail(loginData.email.toLowerCase())
-                .orElseThrow(() -> new DoesNotExistException("User doesn't exist"));
+
         String token = jwtService.generateToken(userDetails);
         return token;
     }
