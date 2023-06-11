@@ -6,6 +6,7 @@ export const MakePostRequest = async (url: String, body: any) => {
     headers: {
       "Content-Type": "application/json",
     },
+    credentials: "include",
     body: JSON.stringify(body),
   });
 
