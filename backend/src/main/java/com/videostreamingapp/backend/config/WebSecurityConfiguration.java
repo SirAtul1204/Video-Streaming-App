@@ -40,7 +40,7 @@ public class WebSecurityConfiguration {
                 .disable()
                 .authorizeHttpRequests()
                 .requestMatchers(
-                        "/user/signup", "/user/login"
+                        "/user/signup", "/user/login", "/user/verify"
                 )
                 .permitAll()
 

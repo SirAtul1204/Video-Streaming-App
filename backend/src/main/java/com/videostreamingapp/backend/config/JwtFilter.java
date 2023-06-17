@@ -38,20 +38,20 @@ public class JwtFilter extends OncePerRequestFilter {
         String jwt = null;
         String userEmail = null;
 
-        if(cookies.length == 0) {
+        if(cookies == null || cookies.length == 0) {
             filterChain.doFilter(request, response);
             return;
         }
 
         boolean isTokenPresent = false;
         for (Cookie cookie : cookies) {
-            if (cookie.getName() == "token") {
+            if (cookie.getName().equals("token")) {
                 isTokenPresent = true;
                 jwt = cookie.getValue();
             }
         }
 
-        if(!isTokenPresent){
+        if(!isTokenPresent || jwt == null || jwt == ""){
             filterChain.doFilter(request, response);
             return;
         }

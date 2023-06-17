@@ -2,6 +2,7 @@ package com.videostreamingapp.backend.advice;
 
 import com.videostreamingapp.backend.exceptions.AlreadyExistException;
 import com.videostreamingapp.backend.exceptions.DoesNotExistException;
+import com.videostreamingapp.backend.exceptions.NotAuthorizedException;
 import com.videostreamingapp.backend.exceptions.WrongPasswordFormatException;
 
 import com.videostreamingapp.backend.utils.common.CommonErrorResponse;
@@ -46,6 +47,18 @@ public class ErrorHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(DoesNotExistException.class)
     public HashMap<String, Object> handleError(DoesNotExistException e){
+        return commonErrorResponse.get(e.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(NotAuthorizedException.class)
+    public HashMap<String, Object> handleError(NotAuthorizedException e){
+        return commonErrorResponse.get(e.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(RuntimeException.class)
+    public HashMap<String, Object> handleError(RuntimeException e){
         return commonErrorResponse.get(e.getMessage());
     }
 }
