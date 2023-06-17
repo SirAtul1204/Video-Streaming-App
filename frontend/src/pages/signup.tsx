@@ -16,10 +16,13 @@ import { useDispatch } from "react-redux";
 import { openToast } from "@/redux/toastSlice";
 import { useRouter } from "next/router";
 import { Loader } from "@/components/Loader";
+import useAuth from "@/hooks/useAuth";
 
 const Signup = () => {
   const dispatch = useDispatch();
   const router = useRouter();
+
+  const isAuth = useAuth();
 
   const [isLoading, setLoading] = useState(false);
 
@@ -34,8 +37,6 @@ const Signup = () => {
   const [isConfirmPasswordError, setConfirmPasswordError] = useState<
     boolean | null
   >(null);
-
-  const [isSignUpButtonDisabled, setSignUpButtonDisabled] = useState(true);
 
   const fields = [
     {
@@ -111,15 +112,14 @@ const Signup = () => {
     else setLoading(false);
   };
 
-  useEffect(() => {
-    if (
-      isNameError === false &&
-      isEmailError === false &&
-      isPasswordError === false &&
-      isConfirmPasswordError === false
-    )
-      setSignUpButtonDisabled(false);
-  }, [isNameError, isEmailError, isPasswordError, isConfirmPasswordError]);
+  if (isAuth === null) {
+    return <Loader />;
+  }
+
+  if (isAuth) {
+    router.push("/");
+    return <Loader />;
+  }
 
   if (isLoading) {
     return <Loader />;
@@ -140,11 +140,7 @@ const Signup = () => {
             </Grid>
           ))}
           <Grid item>
-            <Button
-              variant="contained"
-              disabled={isSignUpButtonDisabled}
-              type="submit"
-            >
+            <Button variant="contained" type="submit">
               Sign Up
             </Button>
           </Grid>

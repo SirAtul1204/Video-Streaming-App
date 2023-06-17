@@ -11,6 +11,7 @@ export const BACKEND_URL = process.env.BACKEND_URL ?? "http://localhost:8080";
 export const ApiRoutes = {
   USER_SIGNUP: "/user/signup",
   USER_LOGIN: "/user/login",
+  USER_LOGOUT: "/user/logout",
 };
 
 export const ToastMessages = {

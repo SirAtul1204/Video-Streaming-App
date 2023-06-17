@@ -1,10 +1,9 @@
 import { ApiRoutes } from "../utils/constants";
 import { MakePostRequest } from "../utils/MakePostRequest";
 import {
+  GeneralResponse,
   LoginCredentials,
-  LoginResponse,
   SignupCredentials,
-  SignupResponse,
 } from "./interface";
 
 const failMessage = {
@@ -19,7 +18,7 @@ export class Service {
         ApiRoutes.USER_SIGNUP,
         signUpCredentials
       );
-      const typedResponse = SignupResponse.parse(response);
+      const typedResponse = GeneralResponse.parse(response);
       return typedResponse;
     } catch (e: any) {
       return failMessage;
@@ -32,7 +31,17 @@ export class Service {
         ApiRoutes.USER_LOGIN,
         loginCredentials
       );
-      const typedResponse = LoginResponse.parse(response);
+      const typedResponse = GeneralResponse.parse(response);
+      return typedResponse;
+    } catch (e: any) {
+      return failMessage;
+    }
+  }
+
+  static async logout() {
+    try {
+      const response = await MakePostRequest(ApiRoutes.USER_LOGOUT, {});
+      const typedResponse = GeneralResponse.parse(response);
       return typedResponse;
     } catch (e: any) {
       return failMessage;

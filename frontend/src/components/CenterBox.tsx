@@ -12,9 +12,11 @@ const CenterBox: FC<CenterBoxProps> = ({ children }) => {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        height: "100svh",
         flexDirection: "column",
         gap: "2rem",
+        flexGrow: 1,
+        flexShrink: 1,
+        flexBasis: "auto",
       }}
     >
       {children}

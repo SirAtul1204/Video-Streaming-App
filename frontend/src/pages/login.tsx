@@ -15,10 +15,13 @@ import { useDispatch } from "react-redux";
 import { openToast } from "@/redux/toastSlice";
 import { useRouter } from "next/router";
 import { Loader } from "@/components/Loader";
+import useAuth from "@/hooks/useAuth";
 
 export default function Login() {
   const dispatch = useDispatch();
   const router = useRouter();
+
+  const isAuth = useAuth();
 
   const [isLoading, setLoading] = useState(false);
 
@@ -27,8 +30,6 @@ export default function Login() {
 
   const [isEmailError, setEmailError] = useState<boolean | null>(null);
   const [isPasswordError, setPasswordError] = useState<boolean | null>(null);
-
-  const [isLoginButtonDisabled, setLoginButtonDisabled] = useState(true);
 
   const fields = [
     {
@@ -64,14 +65,16 @@ export default function Login() {
         color: response.success ? "success" : "error",
       })
     );
-    if (response.success) router.push("/home");
+    if (response.success) router.push("/");
     else setLoading(false);
   };
 
-  useEffect(() => {
-    if (isEmailError === false && isPasswordError === false)
-      setLoginButtonDisabled(false);
-  }, [isEmailError, isPasswordError]);
+  if (isAuth === null) return <Loader />;
+
+  if (isAuth) {
+    router.push("/");
+    return <Loader />;
+  }
 
   if (isLoading) return <Loader message="Logging you in ..." />;
 
@@ -90,11 +93,7 @@ export default function Login() {
             </Grid>
           ))}
           <Grid item>
-            <Button
-              variant="contained"
-              disabled={isLoginButtonDisabled}
-              type="submit"
-            >
+            <Button variant="contained" type="submit">
               Login
             </Button>
           </Grid>

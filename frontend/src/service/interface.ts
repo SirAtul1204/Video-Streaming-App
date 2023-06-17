@@ -5,7 +5,7 @@ export interface SignupCredentials {
   password: string;
 }
 
-export const SignupResponse = z.object({
+export const GeneralResponse = z.object({
   success: z.boolean(),
   message: z.string(),
 });
@@ -14,9 +14,3 @@ export interface LoginCredentials {
   email: string;
   password: string;
 }
-
-export const LoginResponse = z.object({
-  token: z.string(),
-  success: z.boolean(),
-  message: z.string(),
-});

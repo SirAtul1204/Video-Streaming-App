@@ -5,3 +5,12 @@
   padding: 0;
   box-sizing: border-box;
 }
+
+.logo {
+  width: 100px;
+  border-radius: 25px;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
